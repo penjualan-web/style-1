@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Pencatatan Toko UD.BM - Karyawan</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Style untuk input harga manual di keranjang */
+      .cart-item-controls .price-manual-input {
+        width: 100px;
+        margin-left: 5px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fas fa-store"></i>
+          <h2>UD.BM Toko</h2>
+        </div>
+        <nav class="nav-menu">
+          <a href="#" class="nav-item active" data-page="transaksi">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Transaksi</span>
+          </a>
+          <a href="#" class="nav-item" data-page="listbarang">
+            <i class="fas fa-boxes"></i>
+            <span>List Barang</span>
+          </a>
+          <a href="index.html" class="nav-tombol">
+            <i class="fas fa-house"></i>
+            <span>webowner</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div class="header-left">
+            <button class="btn-menu" id="btnMenu">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 id="pageTitle">Transaksi</h1>
+          </div>
+          <div class="header-right">
+            <span class="date-time" id="dateTime"></span>
+            <div class="user-info">
+              <i class="fas fa-user-circle"></i>
+              <span>Karyawan</span>
+            </div>
+          </div>
+        </header>
+
+        <section id="transaksi" class="page active">
+          <div class="transaksi-container">
+            <div class="search-section">
+              <h3>Cari Barang</h3>
+              <div class="search-box">
+                <input
+                  type="text"
+                  id="searchBarang"
+                  placeholder="Cari dengan ID (01) atau Nama Barang..."
+                />
+                <button class="btn-search" id="btnSearch">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <div class="cart-section">
+              <h3>Keranjang Belanja</h3>
+              <div id="cartItems" class="cart-items"></div>
+              <div class="cart-summary">
+                <div class="summary-row">
+                  <span>Total:</span>
+                  <span id="cartTotal" class="total-price">Rp 0</span>
+                </div>
+                <div class="summary-row">
+                  <span>Bayar:</span>
+                  <input
+                    type="number"
+                    id="paymentAmount"
+                    placeholder="Masukkan jumlah bayar"
+                  />
+                </div>
+                <div class="summary-row">
+                  <span>Kembalian:</span>
+                  <span id="changeAmount" class="change-price">Rp 0</span>
+                </div>
+                <div class="customer-info">
+                  <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Nama Pembeli (opsional)"
+                  />
+                  <input
+                    type="text"
+                    id="customerAddress"
+                    placeholder="Alamat Pembeli (opsional)"
+                  />
+                  <textarea
+                    id="transactionNote"
+                    placeholder="Catatan transaksi (opsional)"
+                  ></textarea>
+                </div>
+                <button class="btn-checkout" id="btnCheckout">
+                  <i class="fas fa-check"></i>
+                  Selesaikan Transaksi
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="listbarang" class="page">
+          <div class="list-header">
+            <h3>List Barang</h3>
+          </div>
+          <div class="list-search-box">
+            <input
+              type="text"
+              id="listBarangSearch"
+              placeholder="Cari dengan ID atau Nama Barang..."
+            />
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tanggal Masuk</th>
+                  <th>Nama Barang</th>
+                  <th>Harga Jual (Kotak/Kodi)</th>
+                  <th>Harga Jual (Sak/Kg/Kpg)</th>
+                  <th>Stok UD.BM 1</th>
+                  <th>Stok UD.BM 2</th>
+                  <th>Jumlah Stok</th>
+                </tr>
+              </thead>
+              <tbody id="listBarangTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="karyawan.js"></script>
+  </body>
+</html>

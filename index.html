@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Pencatatan Toko UD.BM - Owner</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Style tambahan untuk perataan tengah di kolom total dan list barang di keuangan */
+      #keuanganTableBody td:nth-child(8) {
+        text-align: center;
+      }
+      #keuanganTableBody .barang-list {
+        margin: 0;
+        padding-left: 15px;
+        list-style-type: disc;
+      }
+      .keuangan-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+      .keuangan-header .filter-bulan {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">
+          <i class="fas fa-store"></i>
+          <h2>UD.BM Toko</h2>
+        </div>
+        <nav class="nav-menu">
+          <a href="#" class="nav-item active" data-page="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" data-page="stok">
+            <i class="fas fa-boxes"></i>
+            <span>Stok Barang (Modal & Jual)</span>
+          </a>
+          <a href="#" class="nav-item" data-page="keuangan">
+            <i class="fas fa-wallet"></i>
+            <span>Rekap Keuangan</span>
+          </a>
+          <a href="#" class="nav-item" data-page="analisis">
+            <i class="fas fa-chart-bar"></i>
+            <span>Analisis Penjualan</span>
+          </a>
+          <a href="#" class="nav-item" data-page="pengeluaran">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Pengeluaran</span>
+          </a>
+          <a href="karyawan.html" class="nav-tombol">
+            <i class="fa-brands fa-slack"></i>
+            <span>Karyawan</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div class="header-left">
+            <button class="btn-menu" id="btnMenu">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 id="pageTitle">Dashboard</h1>
+          </div>
+          <div class="header-right">
+            <span class="date-time" id="dateTime"></span>
+            <div class="user-info">
+              <i class="fas fa-user-circle"></i>
+              <span>Owner</span>
+            </div>
+          </div>
+        </header>
+
+        <section id="dashboard" class="page active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <i class="fas fa-boxes"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="totalBarang">0</h3>
+                <p>Total Jenis Barang</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <i class="fas fa-money-bill-wave"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="pemasukanHariIni">Rp 0</h3>
+                <p>Pemasukan Hari Ini</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="transaksiHariIni">0</h3>
+                <p>Transaksi Hari Ini</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon red">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="stokMenipis">0</h3>
+                <p>Stok Menipis</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-content">
+            <div class="recent-transactions">
+              <h3>Transaksi Terbaru</h3>
+              <div id="recentTransList" class="trans-list"></div>
+            </div>
+            <div class="low-stock">
+              <h3>Stok Menipis</h3>
+              <div id="lowStockList" class="stock-alert-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="stok" class="page">
+          <div class="stok-header">
+            <h3>Manajemen Stok Barang (Modal & Jual)</h3>
+            <button class="btn-primary" id="btnTambahBarang">
+              <i class="fas fa-plus"></i>
+              Tambah Barang Baru
+            </button>
+          </div>
+          <div class="list-search-box">
+             <input
+              type="text"
+              id="stokBarangSearch"
+              placeholder="Cari dengan ID atau Nama Barang..."
+            />
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tanggal Masuk</th>
+                  <th>Nama Barang</th>
+                  <th>Harga Modal</th>
+                  <th>Harga Jual (Kotak/Kodi)</th>
+                  <th>Harga Jual (Sak/Kg/Kpg)</th>
+                  <th>Stok UD.BM 1</th>
+                  <th>Stok UD.BM 2</th>
+                  <th>Jumlah Stok</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="stokTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="keuangan" class="page">
+          <div class="keuangan-header">
+            <h3>Rekap Keuangan Bulanan</h3>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="filter-bulan">
+                  <select id="filterBulan">
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                  </select>
+                  <select id="filterTahun"></select>
+                </div>
+                <button class="btn-primary" id="btnPrintKeuangan" style="white-space: nowrap;">
+                    <i class="fas fa-print"></i>
+                    Cetak
+                </button>
+            </div>
+          </div>
+          <div class="keuangan-summary">
+            <div class="summary-card pemasukan">
+              <h4>Total Pemasukan (Penjualan)</h4>
+              <p id="totalPemasukan">Rp 0</p>
+            </div>
+            <div class="summary-card pengeluaran">
+              <h4>Total Pengeluaran</h4>
+              <p id="totalPengeluaran">Rp 0</p>
+            </div>
+            <div class="summary-card saldo">
+              <h4>Saldo Bersih</h4>
+              <p id="saldoBulanan">Rp 0</p>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table" id="keuanganTable">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Jenis</th>
+                  <th>Nama</th>
+                  <th>Alamat</th>
+                  <th>Barang</th>
+                  <th>Banyaknya/Harga Satuan</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Catatan</th>
+                </tr>
+              </thead>
+              <tbody id="keuanganTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="analisis" class="page">
+          <h3>Analisis Penjualan & View Real-time</h3>
+          <div class="rt-diagram-container">
+              <div class="chart-section">
+                <div class="diagram-header">
+                  <h4>Diagram Penjualan</h4>
+                  <div class="diagram-filter">
+                    <button class="btn-filter active" data-period="daily">
+                      Harian
+                    </button>
+                    <button class="btn-filter" data-period="weekly">Mingguan</button>
+                    <button class="btn-filter" data-period="monthly">Bulanan</button>
+                  </div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="salesChart"></canvas>
+                </div>
+                <div class="chart-info">
+                  <h4>Statistik Periode <span id="periodName">Hari Ini</span></h4>
+                  <div class="stats-row">
+                    <div class="stat-item">
+                      <span>Total Penjualan:</span>
+                      <strong id="periodTotal">Rp 0</strong>
+                    </div>
+                    <div class="stat-item">
+                      <span>Rata-rata:</span>
+                      <strong id="periodAverage">Rp 0</strong>
+                    </div>
+                    <div class="stat-item">
+                      <span>Transaksi:</span>
+                      <strong id="periodTransactions">0</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="realtime-section">
+                <div class="realtime-stats">
+                  <div class="rt-card">
+                    <h4>Transaksi Hari Ini</h4>
+                    <p id="rtTransaksi">0</p>
+                  </div>
+                  <div class="rt-card">
+                    <h4>Pemasukan Hari Ini</h4>
+                    <p id="rtPemasukan">Rp 0</p>
+                  </div>
+                  <div class="rt-card">
+                    <h4>Barang Terjual</h4>
+                    <p id="rtBarangTerjual">0 Item</p>
+                  </div>
+                </div>
+                <div class="realtime-transactions">
+                  <h4>Transaksi Live</h4>
+                  <div id="realtimeList" class="realtime-list"></div>
+                </div>
+              </div>
+          </div>
+        </section>
+
+        <section id="pengeluaran" class="page">
+          <div class="pengeluaran-tabs">
+            <button class="tab-btn active" data-tab="bangunan">
+              Simpan Uang Bangunan
+            </button>
+            <button class="tab-btn" data-tab="takterduga">
+              Biaya Tak Terduga
+            </button>
+          </div>
+
+          <div id="bangunan" class="tab-content active">
+            <div class="section-header">
+              <h3>Simpan Uang Barang Pembuatan Bangunan</h3>
+              <button class="btn-primary" id="btnTambahBangunan">
+                <i class="fas fa-plus"></i>
+                Tambah Simpanan
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th>Jumlah</th>
+                    <th>Total Simpanan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="bangunanTableBody"></tbody>
+              </table>
+            </div>
+            <div class="total-simpanan">
+              <h4>
+                Total Simpanan Bangunan: <span id="totalBangunan">Rp 0</span>
+              </h4>
+            </div>
+          </div>
+
+          <div id="takterduga" class="tab-content">
+            <div class="section-header">
+              <h3>Biaya Tak Terduga</h3>
+              <button class="btn-primary" id="btnTambahTakTerduga">
+                <i class="fas fa-plus"></i>
+                Tambah Biaya
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Waktu</th>
+                    <th>Jenis</th>
+                    <th>Biaya Yang Dikeluarkan</th>
+                    <th>Keterangan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="takTerdugaTableBody"></tbody>
+              </table>
+            </div>
+            <div class="total-biaya">
+              <h4>
+                Total Biaya Tak Terduga: <span id="totalTakTerduga">Rp 0</span>
+              </h4>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="modalBarang" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Tambah Barang Baru</h3>
+        <form id="formBarang">
+          <div class="form-group">
+            <label>ID Barang</label>
+            <input
+              type="text"
+              id="idBarang"
+              required
+              placeholder="Contoh: 01"
+            />
+          </div>
+          <div class="form-group">
+            <label>Nama Barang</label>
+            <input type="text" id="namaBarang" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Modal</label>
+            <input type="number" id="hargaModal" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Jual (Kotak/Kodi/Dll)</label>
+            <input type="number" id="hargaKotak" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Jual (Sak/Kg/Kpg/Dll)</label>
+            <input type="number" id="hargaSatuan" required />
+          </div>
+          <div class="form-group">
+            <label>Stok UD.BM 1</label>
+            <input type="number" id="stokBM1" required value="0" />
+          </div>
+          <div class="form-group">
+            <label>Stok UD.BM 2</label>
+            <input type="number" id="stokBM2" required value="0" />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Simpan</button>
+            <button type="button" class="btn-secondary" id="btnCancelBarang">
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalEditBarang" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Edit Barang</h3>
+        <form id="formEditBarang">
+          <input type="hidden" id="editBarangIndex" />
+          <div class="form-group">
+            <label>ID Barang</label>
+            <input type="text" id="editIdBarang" required />
+          </div>
+          <div class="form-group">
+            <label>Nama Barang</label>
+            <input type="text" id="editNamaBarang" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Modal</label>
+            <input type="number" id="editHargaModal" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Jual (Kotak/Kodi/Dll)</label>
+            <input type="number" id="editHargaKotak" required />
+          </div>
+          <div class="form-group">
+            <label>Harga Jual (Sak/Kg/Kpg/Dll)</label>
+            <input type="number" id="editHargaSatuan" required />
+          </div>
+          <div class="form-group">
+            <label>Stok UD.BM 1</label>
+            <input type="number" id="editStokBM1" required />
+          </div>
+          <div class="form-group">
+            <label>Stok UD.BM 2</label>
+            <input type="number" id="editStokBM2" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Update</button>
+            <button type="button" class="btn-secondary" id="btnCancelEdit">
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalBangunan" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Tambah Simpanan Bangunan</h3>
+        <form id="formBangunan">
+          <div class="form-group">
+            <label>Keterangan</label>
+            <input type="text" id="keteranganBangunan" required />
+          </div>
+          <div class="form-group">
+            <label>Jumlah</label>
+            <input type="number" id="jumlahBangunan" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Simpan</button>
+            <button type="button" class="btn-secondary" id="btnCancelBangunan">
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalTakTerduga" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Tambah Biaya Tak Terduga</h3>
+        <form id="formTakTerduga">
+          <div class="form-group">
+            <label>Jenis</label>
+            <input type="text" id="jenisTakTerduga" required />
+          </div>
+          <div class="form-group">
+            <label>Biaya Yang Dikeluarkan</label>
+            <input type="number" id="biayaTakTerduga" required />
+          </div>
+          <div class="form-group">
+            <label>Keterangan</label>
+            <textarea id="keteranganTakTerduga" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Simpan</button>
+            <button
+              type="button"
+              class="btn-secondary"
+              id="btnCancelTakTerduga"
+            >
+              Batal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="owner.js"></script>
+  </body>
+</html>
